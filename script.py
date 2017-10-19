@@ -31,6 +31,7 @@ def no_of_days_elapsed(conversation_date):
     return delta.days
 
 
+# contains all the lines from the "Automatic email content store.csv"
 lines = list()
 
 with open("Automatic email content store.csv") as f:
@@ -44,7 +45,14 @@ emails = list()
 messages = list()
 
 for line in lines:
+    # the first date$to$email is removed
+    # can use a simple list comprehension removal
+    # this way may be effective
     if (lines.index(line) != 0) and (len(line.split("$")[0]) < 9):
+        # len(line.split("$")[0]) < 9 is to omit the 1st oct 2017 date with weird functionality
+        # recommended to omit
+        # we can convert the 1st oct 2017 to number and can use it
+        # for analysis
         dates.append(line.split("$")[0])
         emails.append(line.split("$")[1])
         messages.append(line.split("$")[2])
@@ -52,24 +60,17 @@ for line in lines:
 
 # removes the extra date line in the csv file
 dates = [i for i in dates if len(i.split("/")) == 3]
-# print(dates)
-# print(len(dates))
-# print(emails)
 unique_emails = list(set(emails))
 # print(unique_emails)
 
 dictionary_of_dates_emails = dict()
-# i = 0
 for i in range(len(emails)):
     dictionary_of_dates_emails[emails[i]] = dates[i]
 
 # print(dictionary_of_dates_emails)
-
+# can use zip but the functionality is not so good for this script
+# zip function is highly recommended
 # dictionary_of_dates_emails = dict(zip(emails, dates))
-# print(dictionary_of_dates_emails)
-
-# for i in unique_emails:
-#     print(i)
 
 messages = [i.strip() for i in messages]
 c = collections.Counter(emails)
@@ -81,4 +82,6 @@ for i in unique_emails:
         csv_file.writerow([str(i), str(no_of_days_elapsed(dictionary_of_dates_emails[i])), str(c[i])])
         pass
     except KeyError:
+        # just to make sure everything is fine
+        # no key error is present until now
         print("key not found")
