@@ -40,8 +40,15 @@ with open("Automatic email content store.csv") as f:
 
 # today = date.today()
 # print(today)
+
+# contains dates in the lines
 dates = list()
+
+# contains emails from the lines `list`
 emails = list()
+
+# contains messages from the lines `list`
+# we didn't use the messages list anywhere
 messages = list()
 
 for line in lines:
